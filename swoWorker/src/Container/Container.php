@@ -26,14 +26,14 @@ class Container
         if (!$this->has($abstract)) {
             // 如果不存在自行
             // 选择返回, 可以抛出一个异常
-            throw new Exception('没有找到这个容器对象'.$abstract, 500);
+            throw new \Exception('没有找到这个容器对象'.$abstract, 500);
         }
 
         $object = $this->bindings[$abstract];
         // 在这个容器中是否存在
         // 1. 判断是否一个为对象
         // 2. 闭包的方式
-        if ($object instanceof Closure) {
+        if ($object instanceof Closure || is_callable($object)) {
             return $object();
         }
 

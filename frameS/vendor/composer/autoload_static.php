@@ -11,9 +11,9 @@ class ComposerStaticInit1ae62cd4abd5223cc8380eef12d3339c
     );
 
     public static $prefixLengthsPsr4 = array (
-        'f' => 
+        'a' => 
         array (
-            'frameS\\' => 7,
+            'app\\' => 4,
         ),
         'S' => 
         array (
@@ -22,9 +22,9 @@ class ComposerStaticInit1ae62cd4abd5223cc8380eef12d3339c
     );
 
     public static $prefixDirsPsr4 = array (
-        'frameS\\' => 
+        'app\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/app',
         ),
         'SwoWorker\\' => 
         array (

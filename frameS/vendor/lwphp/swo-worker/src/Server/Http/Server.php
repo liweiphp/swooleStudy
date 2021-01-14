@@ -7,6 +7,8 @@
  */
 
 namespace SwoWorker\Server\Http;
+use SwoWorker\Message\Http\Request;
+use SwoWorker\Route\Route;
 use SwoWorker\Server\ServerBase;
 
 class Server extends ServerBase
@@ -26,9 +28,23 @@ class Server extends ServerBase
 
     }
 
+    /**
+     * request回调事件
+     * @param \Swoole\Http\Request $request
+     * @param \Swoole\Http\Response $response
+     * @throws \Exception
+     */
     public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
-        p("http request");
-        $response->end('success');
+        if ($request->server['request_uri']=='/favicon.ico'){
+            return "";
+        }
+
+        $request = Request::getInstance()->init($request);
+        $data = Route::getInstance()->match('http', $request);
+        p($this->app->make("config")->get("app"),"config info");
+
+        $response->end($data);
     }
+
 }

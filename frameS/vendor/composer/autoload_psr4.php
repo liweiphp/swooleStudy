@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'frameS\\' => array($baseDir . '/src'),
+    'app\\' => array($baseDir . '/app'),
     'SwoWorker\\' => array($vendorDir . '/lwphp/swo-worker/src'),
 );

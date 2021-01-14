@@ -8,6 +8,7 @@
 
 namespace SwoWorker\Server;
 
+use SwoWorker\Config\Config;
 use SwoWorker\Foundation\Application;
 use SwoWorker\Support\Log;
 
@@ -39,7 +40,10 @@ abstract class ServerBase
     abstract protected function createServer();
     //server 自己的方法
     abstract protected function initEvents();
-    abstract protected function initConfig();
+    protected function initConfig()
+    {
+//        Config::
+    }
     public function start()
     {
         $this->swooleServer->set($this->serverConfig);

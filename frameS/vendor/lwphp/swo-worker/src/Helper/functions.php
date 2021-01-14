@@ -5,17 +5,29 @@
  * Date: 2021-01-23
  * Time: 15:08
  */
-function p($message, $description = null, bool $type = NULL)
-{
-    echo "=======> ".$description." start<=====\n";
-    if ($type){
-        var_dump($message);
-    } elseif (\is_array($message)) {
-        echo \var_export($message, true);
-    } else if (\is_string($message)) {
-        echo $message."\n";
-    } else {
-        var_dump($message);
+use SwoWorker\Foundation\Application;
+use SwoWorker\Support\Log;
+
+if (!function_exists('app')) {
+    /**
+     * @param  [type] $a [description]
+     * @return Application
+     */
+    function app($a = null)
+    {
+        if (empty($a)) {
+            return Application::getInstance();
+        }
+        return Application::getInstance()->make($a);
     }
-    echo "=======> ".$description." end <=======\n";
+}
+if (!function_exists('p')) {
+    /**
+     * @param  [type] $a [description]
+     * @return Application
+     */
+    function p($message, $description = null)
+    {
+        Log::p($message, $description);
+    }
 }

@@ -21,7 +21,6 @@ class Config
     }
     /**
      * 读取PHP文件类型的配置文件
-     * 六星教育 @shineyork老师
      */
     protected function phpParser($path)
     {
@@ -43,6 +42,9 @@ class Config
         return $data;
     }
     // key.key2.key3
+    /**
+     * 获取配置
+     */
     public function get($keys)
     {
         $data = $this->itmes;
