@@ -24,7 +24,8 @@ abstract class ServerBase
     ];
     protected $serverEvents = [
         'server' => [
-            'start' => 'onStart'
+            'start' => 'onStart',
+            'shutdown' => 'onShutdown'
         ],
         'sub' => [],
         'ext' => []
@@ -40,18 +41,49 @@ abstract class ServerBase
     abstract protected function createServer();
     //server 自己的方法
     abstract protected function initEvents();
+
+    /**
+     * 设置swoole配置
+     */
     protected function initConfig()
     {
+        //队列方式task 可以设置message_key
 //        Config::
     }
+
+    /**
+     * 启动server
+     */
     public function start()
     {
         $this->swooleServer->set($this->serverConfig);
         $this->swooleServer->start();
     }
-    public function onStart(){
+
+    /**
+     * start事件
+     * @throws \Exception
+     */
+    public function onStart()
+    {
+        $this->app->make('event')->trigger('swoole_start');
         Log::p($this->host.":".$this->port, "服务启动");
     }
+
+    /**
+     * shutdown事件
+     * @throws \Exception
+     */
+    public function onShutdown()
+    {
+        $this->app->make('event')->trigger('swoole_stop');
+        Log::p($this->host.":".$this->port, "服务关闭");
+
+    }
+
+    /**
+     * 设置事件为对象方式
+     */
     protected function setEvents()
     {
         foreach ($this->serverEvents as $events){

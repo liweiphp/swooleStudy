@@ -11,12 +11,7 @@ use SwoWorker\Support\ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    protected $map = [
-        'http' => [
-            'namespace' => 'app\\http\\',
-            'path' => 'app/http/',
-        ]
-    ];
+    protected $map;
 
     public function register()
     {
@@ -27,7 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         // TODO: Implement boot() method.
-        $this->app->make('Route')->registerRoute($this->app->getBasePath());
+        $this->app->make('Route')->registerRoute($this->map);
     }
 
 }

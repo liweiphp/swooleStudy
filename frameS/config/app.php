@@ -2,6 +2,8 @@
 return [
     'xxx' => 'ooo',
     'providers' => [
-        \SwoWorker\Route\RouteServiceProvider::class
+        app\Providers\RouteServiceProvider::class,
+        \SwoWorker\Event\EventServiceProvider::class
+
     ]
 ];

@@ -8,20 +8,13 @@
 
 namespace SwoWorker\Route;
 
-
-use Couchbase\Cluster;
-
 class Route
 {
     protected static $instance = null;
     protected $verbs = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
     protected $routes = [];
     protected $flag;
-    protected $map = [
-        'http' => [
-            'namespace' => 'app\\http\\'
-        ]
-    ];
+    protected $namespace;
     public function __construct()
     {
 
@@ -48,21 +41,14 @@ class Route
         $uri = trim($uri, '\/');
         $this->addRoute('POST', $uri, $action);
     }
-    public function registerRoute($path)
+    public function registerRoute($map)
     {
-        $route_path = $path."/app/route";
-        $files = scandir($route_path);
-        $data = null;
+
         // 2. 读取文件信息
-        foreach ($files as $key => $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-            // 2.1 获取文件名
-            $filename = \stristr($file, ".php", true);
-            $this->flag = $filename;
-            // 2.2 读取文件信息
-            require_once $route_path."/".$file;
+        foreach ($map as $flag => $item) {
+            $this->namespace[$flag] = $item['namespace'];
+            $this->flag = $flag;
+            require_once $item['path'];
         }
         p($this->routes, "route");
     }
@@ -75,7 +61,11 @@ class Route
     protected function addRoute($method, $uri, $action)
     {
         if (in_array($method, $this->verbs)) {
-            $this->routes[$this->flag][$method][$uri] = $action;
+            if ($action instanceof \Closure) {
+                $this->routes[$this->flag][$method][$uri] = $action;
+            } else {
+                $this->routes[$this->flag][$method][$uri] = $this->namespace[$this->flag].'\\'.$action;
+            }
         }
     }
 
@@ -86,7 +76,7 @@ class Route
             return $this->runAction($action, $flag);
         }
         p("方法不存在");
-        return null;
+        return "404";
     }
     public function runAction($action, $flag)
     {
@@ -94,7 +84,7 @@ class Route
             return call_user_func($action);
         } else {
             list($class, $method) = explode("@", $action);
-            return call_user_func([$this->map[$flag]['namespace'].$class(), $method]);
+            return (new $class())->$method();
         }
     }
 }

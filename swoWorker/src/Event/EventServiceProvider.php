@@ -13,10 +13,13 @@ class EventServiceProvider extends ServiceProvider
     public function register()
     {
         // TODO: Implement register() method.
-        return new Event();
+        $this->app->bind('event', new Event());
     }
     public function boot()
     {
         // TODO: Implement boot() method.
+        $events = $this->app->make('config')->get('event');
+        $this->app->make('event')->registerEvents($events);
+        p($this->app->make('event')->getEvents());
     }
 }

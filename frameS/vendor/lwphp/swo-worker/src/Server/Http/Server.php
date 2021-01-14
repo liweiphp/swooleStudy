@@ -36,14 +36,17 @@ class Server extends ServerBase
      */
     public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
-        if ($request->server['request_uri']=='/favicon.ico'){
-            return "";
+
+        //请求ico文件时候 直接返回空
+        if ($request->server['path_info'] == '/favicon.ico' || $request->server['request_uri'] == '/favicon.ico'){
+            $response->end();
+            return ;
         }
 
-        $request = Request::getInstance()->init($request);
-        $data = Route::getInstance()->match('http', $request);
-        p($this->app->make("config")->get("app"),"config info");
+        $httpRequest = Request::getInstance()->init($request);
+        $data = Route::getInstance()->match('http', $httpRequest);
 
+        p($this->app->make("config")->get("app"),"config info");
         $response->end($data);
     }
 
